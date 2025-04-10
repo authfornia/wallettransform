@@ -1,29 +1,82 @@
-import json
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>wallettransform - JSON Address 转换工具</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background: #f5f7fa;
+    }
+    textarea {
+      width: 100%;
+      height: 200px;
+      font-family: monospace;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    h1 {
+      color: #333;
+    }
+    .info {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>✨ wallettransform</h1>
+  <p class="info">
+    复制你包含 <code>data.followings</code> 的 JSON 数据到下方，我们将为你转换成简洁格式：<code>{ name, address, emoji, tags }</code>
+  </p>
 
-def transform_wallets(raw_data):
-    # 进入 data.followings
-    followings = raw_data.get("data", {}).get("followings", [])
-    transformed = []
-    for item in followings:
-        new_item = {
-            "name": item.get("name", ""),
-            "address": item.get("address", ""),
-            "emoji": "😀",  # 默认 emoji
-            "tags": []      # 默认空 tags
-        }
-        transformed.append(new_item)
-    return transformed
+  <textarea id="inputJson" placeholder="请粘贴你的原始 JSON..."></textarea>
+  <br>
+  <button onclick="transform()">转换格式</button>
 
-if __name__ == "__main__":
-    # 读取原始 JSON 文件
-    with open("wallets_input.json", "r", encoding="utf-8") as f:
-        raw_data = json.load(f)
+  <h2>转换结果:</h2>
+  <textarea id="outputJson" readonly placeholder="转换结果将显示在这里..."></textarea>
 
-    # 转换格式
-    result = transform_wallets(raw_data)
+  <script>
+    function transform() {
+      const input = document.getElementById("inputJson").value;
+      const output = document.getElementById("outputJson");
+      try {
+        const raw = JSON.parse(input);
+        const followings = raw.data?.followings || [];
 
-    # 输出到新文件
-    with open("wallets_output.json", "w", encoding="utf-8") as f:
-        json.dump(result, f, ensure_ascii=False, indent=4)
+        const result = followings.map(item => ({
+          name: item.name || "",
+          address: item.address || "",
+          emoji: "😀",
+          tags: []
+        }));
 
-    print("转换完成！共提取 {} 个地址".format(len(result)))
+        output.value = JSON.stringify(result, null, 2);
+      } catch (e) {
+        output.value = "❌ 格式解析失败，请确保是正确的 JSON 格式\n\n错误信息: " + e.message;
+      }
+    }
+  </script>
+</body>
+</html>
+

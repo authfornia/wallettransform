@@ -29,6 +29,7 @@
       background-color: #007bff;
       color: white;
       cursor: pointer;
+      margin-right: 10px;
     }
     button:hover {
       background-color: #0056b3;
@@ -46,20 +47,29 @@
 <body>
   <h1>✨ wallettransform</h1>
   <p class="info">
-    复制你包含 <code>data.followings</code> 的 JSON 数据到下方，我们将为你转换成简洁格式：<code>{ name, address, emoji, tags }</code>
+    复制你包含 <code>data.followings</code> 的 JSON 数据到下方，我们将为你转换成两种格式：
+    <ul>
+      <li>📦 公牛格式：<code>{ name, address, emoji, tags }</code></li>
+      <li>📝 通用格式：<code>地址 备注</code></li>
+    </ul>
   </p>
 
   <textarea id="inputJson" placeholder="请粘贴你的原始 JSON..."></textarea>
   <br>
   <button onclick="transform()">转换格式</button>
 
-  <h2>转换结果:</h2>
+  <h2>✅ 公牛格式:</h2>
   <textarea id="outputJson" readonly placeholder="转换结果将显示在这里..."></textarea>
+
+  <h2>✅ 通用格式:</h2>
+  <textarea id="plainText" readonly placeholder="地址 备注 格式结果..."></textarea>
 
   <script>
     function transform() {
       const input = document.getElementById("inputJson").value;
-      const output = document.getElementById("outputJson");
+      const outputJson = document.getElementById("outputJson");
+      const plainText = document.getElementById("plainText");
+
       try {
         const raw = JSON.parse(input);
         const followings = raw.data?.followings || [];
@@ -71,12 +81,16 @@
           tags: []
         }));
 
-        output.value = JSON.stringify(result, null, 2);
+        const textResult = followings.map(item => `${item.address || ""} ${item.name || ""}`).join("\n");
+
+        outputJson.value = JSON.stringify(result, null, 2);
+        plainText.value = textResult;
+
       } catch (e) {
-        output.value = "❌ 格式解析失败，请确保是正确的 JSON 格式\n\n错误信息: " + e.message;
+        outputJson.value = "❌ 格式解析失败，请确保是正确的 JSON 格式\n\n错误信息: " + e.message;
+        plainText.value = "";
       }
     }
   </script>
 </body>
 </html>
-

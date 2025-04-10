@@ -1,0 +1,29 @@
+import json
+
+def transform_wallets(raw_data):
+    # 进入 data.followings
+    followings = raw_data.get("data", {}).get("followings", [])
+    transformed = []
+    for item in followings:
+        new_item = {
+            "name": item.get("name", ""),
+            "address": item.get("address", ""),
+            "emoji": "😀",  # 默认 emoji
+            "tags": []      # 默认空 tags
+        }
+        transformed.append(new_item)
+    return transformed
+
+if __name__ == "__main__":
+    # 读取原始 JSON 文件
+    with open("wallets_input.json", "r", encoding="utf-8") as f:
+        raw_data = json.load(f)
+
+    # 转换格式
+    result = transform_wallets(raw_data)
+
+    # 输出到新文件
+    with open("wallets_output.json", "w", encoding="utf-8") as f:
+        json.dump(result, f, ensure_ascii=False, indent=4)
+
+    print("转换完成！共提取 {} 个地址".format(len(result)))

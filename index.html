@@ -7,6 +7,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      font-size: 16px;
       padding: 30px;
       background: #f5f7fa;
     }
@@ -44,8 +45,9 @@
     }
     .author {
       margin-top: 10px;
-      font-size: 14px;
+      font-size: 20px;
       color: #333;
+      animation: pulse 2s infinite;
     }
     .author a {
       color: #1da1f2;
@@ -60,13 +62,18 @@
       vertical-align: middle;
       margin-right: 8px;
     }
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
   </style>
 </head>
 <body>
   <h1>✨ wallettransform</h1>
   <p class="author">
     <img class="logo" src="https://abs.twimg.com/icons/apple-touch-icon-192x192.png" alt="Twitter Logo">
-   我是课代表，这个网站是我制作，欢迎大家点击关注 👉 <a href="https://x.com/authfornia" target="_blank">@authfornia</a>
+    作者是课代表，欢迎大家点击关注 👉 <a href="https://x.com/authfornia" target="_blank">@authfornia</a>
   </p>
   <p class="info">
     复制你包含 <code>data.followings</code> 的 JSON 数据到下方，我们将为你转换成两种格式：
